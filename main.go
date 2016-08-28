@@ -15,8 +15,9 @@ import (
 // 4. 生产者通过websocket接收消息写入rabbitmq, 消费都通过rabbitmq接收消息写入websocket
 
 // Client 表示一个keep alive的websocket连接以及一个连接RabbitMQ作为生产者的Channel和作为消费者的Channel
+// 当客户端向websocket写消息时, websocket接收消息后, 通过producer向消息队列发送消息, 而每一个Client的consumer用于接收消息, 并且写到websocket里
 type Client struct {
-	conn     *websocket.Conn
+	conn     *websocket.Conn // 用于读取数据
 	producer *amqp.Channel
 	consumer *amqp.Channel
 	name     string
